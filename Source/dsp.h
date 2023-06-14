@@ -22,7 +22,9 @@ public:
         kFullWave,
         kHalfWave,
         kHard,
-        kSoft,
+        kSoft1,
+        kSoft2,
+        kSoft3,
         kSaturation,
         kBitCrush
     };
@@ -68,7 +70,11 @@ public:
     
     SampleType processHardClipping(SampleType inputSample);
     
-    SampleType processSoftClipping(SampleType inputSample);
+    SampleType processSoftClipping1(SampleType inputSample);
+    
+    SampleType processSoftClipping2(SampleType inputSample);
+    
+    SampleType processSoftClipping3(SampleType inputSample);
     
     SampleType processSaturation(SampleType inputSample);
     

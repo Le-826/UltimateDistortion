@@ -80,9 +80,19 @@ SampleType Distortion<SampleType>::processSample(SampleType inputSample) noexcep
             return processHardClipping(inputSample);
             break;
         }
-        case Mode::kSoft:
+        case Mode::kSoft1:
         {
-            return processSoftClipping(inputSample);
+            return processSoftClipping1(inputSample);
+            break;
+        }
+        case Mode::kSoft2:
+        {
+            return processSoftClipping2(inputSample);
+            break;
+        }
+        case Mode::kSoft3:
+        {
+            return processSoftClipping3(inputSample);
             break;
         }
         case Mode::kSaturation:
@@ -144,11 +154,35 @@ SampleType Distortion<SampleType>::processHardClipping(SampleType inputSample)
 }
 
 template <typename SampleType>
-SampleType Distortion<SampleType>::processSoftClipping(SampleType inputSample)
+SampleType Distortion<SampleType>::processSoftClipping1(SampleType inputSample)
+{
+    auto wet = inputSample * juce::Decibels::decibelsToGain(gain.getNextValue());
+    
+    wet = wet - (std::pow(wet, 3) / 3);
+    
+    auto ratio = (1.0 - mix.getNextValue()) * inputSample + wet * mix.getNextValue();
+    
+    return ratio * juce::Decibels::decibelsToGain(output.getNextValue());
+}
+
+template <typename SampleType>
+SampleType Distortion<SampleType>::processSoftClipping2(SampleType inputSample)
 {
     auto wet = inputSample * juce::Decibels::decibelsToGain(gain.getNextValue());
     
     wet = piDivisor * std::atan(wet);
+    
+    auto ratio = (1.0 - mix.getNextValue()) * inputSample + wet * mix.getNextValue();
+    
+    return ratio * juce::Decibels::decibelsToGain(output.getNextValue());
+}
+
+template <typename SampleType>
+SampleType Distortion<SampleType>::processSoftClipping3(SampleType inputSample)
+{
+    auto wet = inputSample * juce::Decibels::decibelsToGain(gain.getNextValue());
+    
+    wet = piDivisor * std::tanh(wet);
     
     auto ratio = (1.0 - mix.getNextValue()) * inputSample + wet * mix.getNextValue();
     

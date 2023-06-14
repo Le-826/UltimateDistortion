@@ -42,13 +42,14 @@ juce::AudioProcessorValueTreeState::ParameterLayout UltimateDistortionAudioProce
 {
     std::vector<std::unique_ptr<juce::RangedAudioParameter>> params;
     
-    juce::StringArray modes = {"Full Wave Rectification", "Half Wave Rectification", "Hard Clippping", "Soft Clipping", "Saturation", "Bit Reduction"};
+    juce::StringArray modes = {"Full Wave Rectification", "Half Wave Rectification", "Hard Clippping", "Soft Clipping1","Soft Clipping2","Soft Clipping3", "Saturation", "Bit Reduction"};
     
     auto pMode = std::make_unique<juce::AudioParameterChoice>(juce::ParameterID({"MODE", 1}), "Mode", modes, 0);
     auto pGain = std::make_unique<juce::AudioParameterFloat>(juce::ParameterID({"GAIN", 1}), "Gain", 0.0f, 24.0f, 0.0f);
     auto pMix = std::make_unique<juce::AudioParameterFloat>(juce::ParameterID({"MIX", 1}), "Mix", 0.0f, 1.0f, 1.0f);
     auto pTone = std::make_unique<juce::AudioParameterFloat>(juce::ParameterID({"TONE", 1}), "Tone", 0.0f, 20000.0f, 20000.0f);
     auto pOutput = std::make_unique<juce::AudioParameterFloat>(juce::ParameterID({"OUTPUT", 1}), "Output", -24.0f, 24.0f, 0.0f);
+    
     params.push_back(std::move(pMode));
     params.push_back(std::move(pGain));
     params.push_back(std::move(pMix));
@@ -84,15 +85,25 @@ void UltimateDistortionAudioProcessor::updateParameters()
         }
         case 3:
         {
-            distortion.setMode(Distortion<float>::Mode::kSoft);
+            distortion.setMode(Distortion<float>::Mode::kSoft1);
             break;
         }
         case 4:
         {
-            distortion.setMode(Distortion<float>::Mode::kSaturation);
+            distortion.setMode(Distortion<float>::Mode::kSoft2);
             break;
         }
         case 5:
+        {
+            distortion.setMode(Distortion<float>::Mode::kSoft3);
+            break;
+        }
+        case 6:
+        {
+            distortion.setMode(Distortion<float>::Mode::kSaturation);
+            break;
+        }
+        case 7:
         {
             distortion.setMode(Distortion<float>::Mode::kBitCrush);
             break;
