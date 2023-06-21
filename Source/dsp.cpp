@@ -158,7 +158,18 @@ SampleType Distortion<SampleType>::processSoftClipping1(SampleType inputSample)
 {
     auto wet = inputSample * juce::Decibels::decibelsToGain(gain.getNextValue());
     
-    wet = wet - (std::pow(wet, 3) / 3);
+    if (std::abs(wet) >= 0.0 && std::abs(wet) < 0.33)
+    {
+        wet *= 2;
+    }
+    else if (std::abs(wet) >= 0.33 && std::abs(wet) < 0.67)
+    {
+        wet = (3.0 - std::pow((2.0 - 3.0 * wet), 2.0)) / 3.0;
+    }
+    else
+    {
+        wet = 1;
+    }
     
     auto ratio = (1.0 - mix.getNextValue()) * inputSample + wet * mix.getNextValue();
     

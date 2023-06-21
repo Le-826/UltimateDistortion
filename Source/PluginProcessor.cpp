@@ -46,10 +46,9 @@ juce::AudioProcessorValueTreeState::ParameterLayout UltimateDistortionAudioProce
     
     auto pMode = std::make_unique<juce::AudioParameterChoice>(juce::ParameterID({"MODE", 1}), "Mode", modes, 0);
     auto pGain = std::make_unique<juce::AudioParameterFloat>(juce::ParameterID({"GAIN", 1}), "Gain", 0.0f, 24.0f, 0.0f);
-    auto pMix = std::make_unique<juce::AudioParameterFloat>(juce::ParameterID({"MIX", 1}), "Mix", 0.0f, 1.0f, 1.0f);
+    auto pMix = std::make_unique<juce::AudioParameterFloat>(juce::ParameterID({"MIX", 1}), "Mix", 0.0f, 1.0f, 0.0f);
     auto pTone = std::make_unique<juce::AudioParameterFloat>(juce::ParameterID({"TONE", 1}), "Tone", 0.0f, 20000.0f, 20000.0f);
     auto pOutput = std::make_unique<juce::AudioParameterFloat>(juce::ParameterID({"OUTPUT", 1}), "Output", -24.0f, 24.0f, 0.0f);
-    
     params.push_back(std::move(pMode));
     params.push_back(std::move(pGain));
     params.push_back(std::move(pMix));
@@ -256,7 +255,7 @@ bool UltimateDistortionAudioProcessor::hasEditor() const
 
 juce::AudioProcessorEditor* UltimateDistortionAudioProcessor::createEditor()
 {
-    return new juce::GenericAudioProcessorEditor (*this);
+    return new UltimateDistortionAudioProcessorEditor (*this);
 }
 
 //==============================================================================

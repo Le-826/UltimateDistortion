@@ -58,8 +58,12 @@ public:
             auto* outputSamples = outputBlock.getChannelPointer (channel);
 
             for (size_t i = 0; i < numSamples; ++i)
+            {
                 outputSamples[i] = processSample(inputSamples[i]);
+            }
+                
         }
+        
     }
     
     SampleType processSample(SampleType inputSample) noexcept;
@@ -89,4 +93,6 @@ private:
     
     float sampleRate = 44100.0f;
     Mode mode = Mode::kHard;
+    
+    juce::dsp::LinkwitzRileyFilter<float> lpFilter;
 };
